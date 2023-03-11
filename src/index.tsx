@@ -5,6 +5,7 @@ import { store } from './app/store';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import UserList from './components/UserList';
+import UserDetails from './components/UserDetails';
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
@@ -15,6 +16,7 @@ root.render(
       <div className="container">
         <UserList />
       </div>
+      <UserDetails />
     </Provider>
   </React.StrictMode>
 );

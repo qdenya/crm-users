@@ -2,9 +2,9 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { deleteUsers, reset, setSearchTerm, setSelectedUser, setUsers, User } from '../../features/users/usersSlice';
+import { deleteUsers, reset, setSearchTerm, setSelectedUser, setUsers, User, openModal } from '../../features/users/usersSlice';
 
-import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, TextField, InputAdornment, Button, Typography } from '@mui/material';
+import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, TextField, InputAdornment  } from '@mui/material';
 import { Delete as DeleteIcon, Search as SearchIcon, Refresh as RefreshIcon, InfoOutlined as InfoIcon } from '@mui/icons-material';
 
 const UserList = () => {
@@ -34,15 +34,16 @@ const UserList = () => {
  
   const handleUserClick = (user: User) => {
     dispatch(setSelectedUser(user));
+    dispatch(openModal());
   };
 
   const handleSearch = () => {
-    const filtered = filteredUsers.filter(
-      (user) =>
-        user.name.toLowerCase().includes(searchValue.toLowerCase()) ||
-        user.username.toLowerCase().includes(searchValue.toLowerCase()) ||
-        user.email.toLowerCase().includes(searchValue.toLowerCase())
-    );
+    // const filtered = filteredUsers.filter(
+    //   (user) =>
+    //     user.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+    //     user.username.toLowerCase().includes(searchValue.toLowerCase()) ||
+    //     user.email.toLowerCase().includes(searchValue.toLowerCase())
+    // );
     //dispatch(setFilteredUsers(filtered));
     dispatch(setSearchTerm(searchValue));
   };
@@ -73,7 +74,7 @@ const UserList = () => {
                 <ListItem key={user.id}>
                     <ListItemText primary={user.name} secondary={user.email} />
                     <ListItemSecondaryAction>
-                        <IconButton aria-label="delete" onClick={() => handleDeleteUser(user.id)}>
+                        <IconButton aria-label="more" onClick={() => handleUserClick(user)}>
                             <InfoIcon />
                         </IconButton>
                         <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteUser(user.id)}>

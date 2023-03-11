@@ -30,6 +30,7 @@ export interface UserState {
   searchTerm: string;
   deletedUserIds: number[];
   selectedUser: User | null;
+  openModal: boolean;
 }
 
 const initialState: UserState = {
@@ -38,6 +39,7 @@ const initialState: UserState = {
   searchTerm: '',
   deletedUserIds: [],
   selectedUser: null,
+  openModal: false
 };
 
 const userSlice = createSlice({
@@ -67,9 +69,15 @@ const userSlice = createSlice({
       state.deletedUserIds = [];
       state.filteredUsers = state.users;
     },
-    setSelectedUser(state, action: PayloadAction<User>) {
+    setSelectedUser(state, action: PayloadAction<User | null>) {
       state.selectedUser = action.payload;
     },
+    openModal(state) {
+      state.openModal = true;
+    },
+    closeModal(state) {
+      state.openModal = false;
+    }
   },
 });
 
@@ -79,6 +87,8 @@ export const {
   setSearchTerm,
   reset,
   setSelectedUser,
+  openModal,
+  closeModal
 } = userSlice.actions;
 
 export default userSlice.reducer;
