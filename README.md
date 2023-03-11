@@ -1,10 +1,10 @@
 # CRM Users
 
-Brief description of your project.
+Output of information from the source https://jsonplaceholder.typicode.com/users. It is possible to open a modal window with additional information and to delete the user, as well as reset to the original settings.
 
 ## Installation
 
-1. Clone the repository: `git clone <https://github.com/qdenya/crm-users.git>`
+1. Clone the repository: `git clone https://github.com/qdenya/crm-users.git`
 2. Install dependencies: `npm install`
 
 ## Usage
@@ -14,4 +14,4 @@ Brief description of your project.
 
 ## Author
 
-This project is created by Denis Drobysh [https://www.linkedin.com/in/qdenya/](Linkedin).# crm-users
+This project is created by Denis Drobysh [https://www.linkedin.com/in/qdenya/](Linkedin).

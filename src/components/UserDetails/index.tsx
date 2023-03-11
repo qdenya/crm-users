@@ -1,23 +1,15 @@
-import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import { closeModal, deleteUsers, setSelectedUser } from '../../features/users/usersSlice';
+import { useAppDispatch, useAppSelector } from '../../app/hooks';
 
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
+import { closeModal, deleteUsers } from '../../features/users/usersSlice';
 
-import { List, ListItem, ListItemAvatar, ListItemText, Chip, Button } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemAvatar, ListItemText, Chip, Button, Avatar } from '@mui/material';
+import { Work as WorkIcon, AlternateEmailOutlined as AlternateEmailOutlinedIcon, BusinessOutlined as BusinessOutlinedIcon } from '@mui/icons-material';
 
-import Avatar from '@mui/material/Avatar';
-import WorkIcon from '@mui/icons-material/Work';
-import AlternateEmailOutlinedIcon from '@mui/icons-material/AlternateEmailOutlined';
-import BusinessOutlinedIcon from '@mui/icons-material/BusinessOutlined';
 
 const UserDetails = () => {
-    const dispatch = useDispatch();
-    const { selectedUser, openModal } = useSelector((state: RootState) => state.usersStore);
+    const dispatch = useAppDispatch();
+    const { selectedUser, openModal } = useAppSelector((state: RootState) => state.usersStore);
 
     const handleDelete = () => {
         if(selectedUser) {
@@ -44,7 +36,7 @@ const UserDetails = () => {
                                 <AlternateEmailOutlinedIcon />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary="Email" secondary={selectedUser?.email} />
+                        <ListItemText primary="Email" secondary={selectedUser?.email.toLowerCase()} />
                     </ListItem>
                     <ListItem disableGutters>
                         <ListItemAvatar>

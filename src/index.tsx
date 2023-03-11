@@ -13,9 +13,7 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <Provider store={store}>
-      <div className="container">
-        <UserList />
-      </div>
+      <UserList />
       <UserDetails />
     </Provider>
   </React.StrictMode>
