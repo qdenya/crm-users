@@ -58,11 +58,13 @@ const userSlice = createSlice({
     },
     setSearchTerm(state, action: PayloadAction<string>) {
       state.searchTerm = action.payload;
-      state.filteredUsers = state.users.filter((user) =>
-        [user.name, user.username, user.email].some((field) =>
-          field.toLowerCase().includes(action.payload.toLowerCase()),
-        ),
-      );
+      state.filteredUsers = state.users
+        .filter((user)=>!state.deletedUserIds.some((id) => user.id == id))
+        .filter((user) =>
+          [user.name, user.username, user.email].some((field) =>
+            field.toLowerCase().includes(action.payload.toLowerCase()),
+          ),
+        );
     },
     reset(state) {
       state.searchTerm = '';
@@ -92,4 +94,3 @@ export const {
 } = userSlice.actions;
 
 export default userSlice.reducer;
-

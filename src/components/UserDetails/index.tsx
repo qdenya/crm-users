@@ -1,15 +1,19 @@
 import { RootState } from '../../app/store';
 import { useAppDispatch, useAppSelector } from '../../app/hooks';
-
-import { closeModal, deleteUsers } from '../../features/users/usersSlice';
-
+import { closeModal, deleteUsers } from '../../redux/users/usersSlice';
 import { Dialog, DialogActions, DialogContent, DialogTitle, List, ListItem, ListItemAvatar, ListItemText, Chip, Button, Avatar } from '@mui/material';
 import { Work as WorkIcon, AlternateEmailOutlined as AlternateEmailOutlinedIcon, BusinessOutlined as BusinessOutlinedIcon } from '@mui/icons-material';
-
 
 const UserDetails = () => {
     const dispatch = useAppDispatch();
     const { selectedUser, openModal } = useAppSelector((state: RootState) => state.usersStore);
+
+    if(!selectedUser) {
+        return null;
+    }
+
+    const { name, username, email, company, address } = selectedUser;
+    const { street, suite, city, zipcode } = address;
 
     const handleDelete = () => {
         if(selectedUser) {
@@ -25,8 +29,8 @@ const UserDetails = () => {
     return (
         <Dialog open={openModal} onClose={handleClose}>
             <DialogTitle>
-                {selectedUser?.name}
-                <Chip size="small" sx={{ml: "10px"}} label={"@" + selectedUser?.username} />
+                {name}
+                <Chip size="small" sx={{ml: "10px"}} label={"@" + username} />
             </DialogTitle>
             <DialogContent>
                 <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
@@ -36,7 +40,7 @@ const UserDetails = () => {
                                 <AlternateEmailOutlinedIcon />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary="Email" secondary={selectedUser?.email.toLowerCase()} />
+                        <ListItemText primary="Email" secondary={email.toLowerCase()} />
                     </ListItem>
                     <ListItem disableGutters>
                         <ListItemAvatar>
@@ -44,7 +48,7 @@ const UserDetails = () => {
                                 <WorkIcon />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary="Company" secondary={selectedUser?.company.name} />
+                        <ListItemText primary="Company" secondary={company.name} />
                     </ListItem>
                     <ListItem disableGutters>
                         <ListItemAvatar>
@@ -52,7 +56,7 @@ const UserDetails = () => {
                                 <BusinessOutlinedIcon />
                             </Avatar>
                         </ListItemAvatar>
-                        <ListItemText primary="Address" secondary={selectedUser?.address.street+", "+selectedUser?.address.suite + " " + selectedUser?.address.city + " " + selectedUser?.address.zipcode + ""} />
+                        <ListItemText primary="Address" secondary={`${street}, ${suite} ${city}, ${zipcode}`} />
                     </ListItem>
                 </List>
             </DialogContent>
