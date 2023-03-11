@@ -1,22 +1,17 @@
 import axios from 'axios';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
-import {
-  deleteUsers,
-  reset,
-  setSearchTerm,
-  setSelectedUser,
-  setUsers,
-  User,
-} from '../../features/users/usersSlice';
+import { deleteUsers, reset, setSearchTerm, setSelectedUser, setUsers, User } from '../../features/users/usersSlice';
+
+import { List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, TextField, InputAdornment, Button, Typography } from '@mui/material';
+import { Delete as DeleteIcon, Search as SearchIcon, Refresh as RefreshIcon, InfoOutlined as InfoIcon } from '@mui/icons-material';
 
 const UserList = () => {
   const dispatch = useDispatch();
-  //const count = useAppSelector(selectCount);
-  const { filteredUsers, searchTerm, deletedUserIds } = useSelector(
-    (state: RootState) => state.usersStore,
-  );
+
+  const { filteredUsers } = useSelector((state: RootState) => state.usersStore);
+  const [searchValue, setSearchValue] = useState('');
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -32,52 +27,63 @@ const UserList = () => {
     dispatch(deleteUsers([userId]));
   };
 
-  const handleSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch(setSearchTerm(event.target.value));
-  };
-
   const handleReset = () => {
+    setSearchValue("");
     dispatch(reset());
   };
  
   const handleUserClick = (user: User) => {
     dispatch(setSelectedUser(user));
   };
- 
+
+  const handleSearch = () => {
+    const filtered = filteredUsers.filter(
+      (user) =>
+        user.name.toLowerCase().includes(searchValue.toLowerCase()) ||
+        user.username.toLowerCase().includes(searchValue.toLowerCase()) ||
+        user.email.toLowerCase().includes(searchValue.toLowerCase())
+    );
+    //dispatch(setFilteredUsers(filtered));
+    dispatch(setSearchTerm(searchValue));
+  };
   return (
-    <div>
-      <h1>User List</h1>
-      <div>
-        <input type="text" value={searchTerm} onChange={handleSearch} />
-        <button onClick={handleReset}>Reset</button>
-      </div>
-      <table>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {filteredUsers.map((user) => (
-            <tr
-              key={user.id}
-              style={{ textDecoration: deletedUserIds.includes(user.id) ? 'line-through' : 'none' }}
-            >
-              <td>{user.name}</td>
-              <td>{user.username}</td>
-              <td>{user.email}</td>
-              <td>
-                <button onClick={() => handleDeleteUser(user.id)}>Delete</button>
-                <button onClick={() => handleUserClick(user)}>Details</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+    <>
+        <TextField
+            label="Search users"
+            variant="outlined"
+            fullWidth
+            margin="normal"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            InputProps={{
+            endAdornment: (
+                <InputAdornment position="end">
+                    <IconButton onClick={handleSearch}>
+                        <SearchIcon />
+                    </IconButton>
+                    <IconButton onClick={handleReset}>
+                        <RefreshIcon />
+                    </IconButton>
+                </InputAdornment>
+            ),
+            }}
+        />
+        <List>
+            {filteredUsers.map((user) => (
+                <ListItem key={user.id}>
+                    <ListItemText primary={user.name} secondary={user.email} />
+                    <ListItemSecondaryAction>
+                        <IconButton aria-label="delete" onClick={() => handleDeleteUser(user.id)}>
+                            <InfoIcon />
+                        </IconButton>
+                        <IconButton edge="end" aria-label="delete" onClick={() => handleDeleteUser(user.id)}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </ListItemSecondaryAction>
+                </ListItem>
+            ))}
+        </List>
+    </>
   );
 };
 
